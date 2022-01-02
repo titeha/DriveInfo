@@ -5,6 +5,10 @@ VisualStudioVersion = 17.0.32014.148
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FileExtensions", "Library\FileExtensions\FileExtensions.csproj", "{46D37B4D-BDDC-4B9D-AC3E-47DD732A00BF}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Library", "Library", "{0B8CF439-DE23-4E2A-94D0-85A99580A737}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImportWinAPI", "Library\ImportWinAPI\ImportWinAPI.csproj", "{574147D9-CD52-4B96-9AFC-0966088462C9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,9 +19,17 @@ Global
 		{46D37B4D-BDDC-4B9D-AC3E-47DD732A00BF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{46D37B4D-BDDC-4B9D-AC3E-47DD732A00BF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{46D37B4D-BDDC-4B9D-AC3E-47DD732A00BF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{574147D9-CD52-4B96-9AFC-0966088462C9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{574147D9-CD52-4B96-9AFC-0966088462C9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{574147D9-CD52-4B96-9AFC-0966088462C9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{574147D9-CD52-4B96-9AFC-0966088462C9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{46D37B4D-BDDC-4B9D-AC3E-47DD732A00BF} = {0B8CF439-DE23-4E2A-94D0-85A99580A737}
+		{574147D9-CD52-4B96-9AFC-0966088462C9} = {0B8CF439-DE23-4E2A-94D0-85A99580A737}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7AE4561E-535D-4F57-8A06-8FD1345F8CF4}

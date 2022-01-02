@@ -5,7 +5,8 @@
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
     <ImplicitUsings>enable</ImplicitUsings>
-    <BaseOutputPath>..\..\bin\FileExtensions</BaseOutputPath>
+    <DebugType>full</DebugType>
+    <BaseOutputPath>..\..\bin\ImportWinAPI</BaseOutputPath>
   </PropertyGroup>
 
 </Project>

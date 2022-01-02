@@ -5,6 +5,6 @@ namespace File.Extensions
 {
  public static class FileExtensions
  {
-  public static bool IsJunction(this DirectoryInfo directory) => FileAttributes.ReparsePoint == directory.Attributes.ReparsePoint & FileAttributes.ReparsePoint;
+  public static bool IsJunction(this DirectoryInfo directory) => FileAttributes.ReparsePoint == (directory.Attributes & FileAttributes.ReparsePoint);
  }
 }
