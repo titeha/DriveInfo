@@ -1,0 +1,73 @@
+﻿<Window x:Class="ShowDriveInfo.MainWindow"
+		xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+		xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+		xmlns:local="clr-namespace:ShowDriveInfo"
+		mc:Ignorable="d"
+		Title="Информация о дисках"
+		Height="450"
+		Width="800">
+ <Grid>
+  <Grid.RowDefinitions>
+   <RowDefinition Height="Auto" />
+   <RowDefinition Height="*" />
+  </Grid.RowDefinitions>
+  <GroupBox Header="Общая информация о диске"
+			Margin="2">
+   <Grid>
+	<Grid.ColumnDefinitions>
+	 <ColumnDefinition Width="Auto" />
+	 <ColumnDefinition />
+	 <ColumnDefinition Width="Auto" />
+	 <ColumnDefinition />
+	</Grid.ColumnDefinitions>
+	<Grid.RowDefinitions>
+	 <RowDefinition />
+	 <RowDefinition />
+	 <RowDefinition />
+	</Grid.RowDefinitions>
+	<TextBlock Text="Имя диска"
+			   Margin="2"
+			   HorizontalAlignment="Left" />
+	<ComboBox Grid.Column="1"
+			  Margin="2" />
+	<TextBlock Text="Формат диска"
+			   Margin="2"
+			   HorizontalAlignment="Left"
+			   Grid.Column="2" />
+	<TextBlock Text="{Binding}"
+			   Margin="2"
+			   Grid.Column="3"
+			   HorizontalAlignment="Left" />
+	<TextBlock Text="Общий размер диска"
+			   HorizontalAlignment="Left"
+			   Grid.Row="1"
+			   Margin="2" />
+	<TextBlock Text="{Binding}"
+			   Margin="2"
+			   HorizontalAlignment="Left"
+			   Grid.Column="1"
+			   Grid.Row="1" />
+	<TextBlock Text="Всего свободных:"
+			   Margin="2"
+			   HorizontalAlignment="Left"
+			   Grid.Column="2"
+			   Grid.Row="1" />
+	<TextBlock Text="Доступно свободных:"
+			   Margin="2"
+			   HorizontalAlignment="Left"
+			   Grid.Column="2"
+			   Grid.Row="2" />
+	<TextBlock Text="{Binding}"
+			   Margin="2"
+			   HorizontalAlignment="Left"
+			   Grid.Column="3"
+			   Grid.Row="2" />
+   </Grid>
+  </GroupBox>
+  <GroupBox Header="Файловая система"
+			Grid.Row="1"
+			Margin="2"></GroupBox>
+ </Grid>
+</Window>

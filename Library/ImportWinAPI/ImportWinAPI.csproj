@@ -7,6 +7,8 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <DebugType>full</DebugType>
     <BaseOutputPath>..\..\bin\ImportWinAPI</BaseOutputPath>
+    <Authors>Artemy Sobolev</Authors>
+    <Copyright>Artemy Sobolev</Copyright>
   </PropertyGroup>
 
 </Project>

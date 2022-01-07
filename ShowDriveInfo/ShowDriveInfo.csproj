@@ -1,16 +1,17 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
+    <OutputType>WinExe</OutputType>
     <TargetFramework>net6.0-windows</TargetFramework>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
-    <BaseOutputPath>..\..\bin\Permissions</BaseOutputPath>
+    <BaseOutputPath>..\bin\ShowDriveInfo</BaseOutputPath>
     <Authors>Artemy Sobolev</Authors>
     <Copyright>Artemy Sobolev</Copyright>
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ImportWinAPI\ImportWinAPI.csproj" />
+    <ProjectReference Include="..\Library\Permissions\Permissions.csproj" />
   </ItemGroup>
 
 </Project>
