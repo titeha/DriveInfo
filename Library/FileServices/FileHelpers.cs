@@ -1,20 +1,34 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Management;
+using System.Runtime.InteropServices;
 using System.Text;
-
-using static ImportWinAPI.Imports;
 
 namespace FileServices
 {
- public class FileHelpers
+ public sealed class FileHelpers
  {
-  private uint _clusterSize = 0;
+  #region Imports
+  [DllImport("kernel32.dll", SetLastError = true)]
+  private static extern bool FindClose(IntPtr hFindFile);
+
+  [DllImport("kernel32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
+  private static extern IntPtr FindFirstFileName(string lpFileName, uint dwFlags, ref uint StringLength, StringBuilder LinkName);
+
+  [DllImport("kernel32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
+  private static extern bool FindNextFileName(IntPtr hFindStream, ref uint StringLength, StringBuilder LinkName);
+
+  [DllImport("kernel32.dll", CharSet = CharSet.Unicode)]
+  private static extern uint GetCompressedFileSize(string lpFileName, out uint lpFileSizeHight);
+
+  internal static readonly IntPtr INVALID_HANDLE_NAME = (IntPtr)(-1);
+  internal const int MAX_PATH = 65535; // Max. NTFS path length
+  #endregion
+
+  private uint _clusterSize;
   private const ulong _MFTFielSize = 680;
-  private StringBuilder _sbPath = new StringBuilder(MAX_PATH);
+  private readonly StringBuilder _sbPath = new(MAX_PATH);
 
   /// <summary>
   /// Получение размера кластер на диске (томе)
@@ -38,7 +52,8 @@ namespace FileServices
    return _clusterSize;
   }
 
-  private DriveInfo GetDriveByFileInfo(FileInfo file) => new DriveInfo(Path.GetPathRoot(file.FullName) ?? throw new ArgumentException());
+  private static DriveInfo GetDriveByFileInfo(FileInfo file) => new(Path.GetPathRoot(file.FullName)
+   ?? throw new ArgumentException($"Неверное имя файла {file.FullName}"));
 
   /// <summary>
   /// Расчет занимаемого места на диске (томе) файлом с учетом размера кластера
@@ -71,8 +86,7 @@ namespace FileServices
    {
 	do
 	{
-	 _sbPath.Insert(0, _volume);
-	 yield return _sbPath.ToString();
+	 yield return _sbPath.Insert(0, _volume).ToString();
 	 _charCount = (uint)_sbPath.Capacity;
 	} while (FindNextFileName(_findHandle, ref _charCount, _sbPath));
 
@@ -85,7 +99,7 @@ namespace FileServices
   /// </summary>
   /// <param name="file">Имя исследуемого файла</param>
   /// <returns>Размер файла в байтах</returns>
-  public ulong GetRealFileSize(FileInfo file)
+  public static ulong GetRealFileSize(FileInfo file)
   {
    uint _loSize = GetCompressedFileSize(file.FullName, out uint _hiSize);
    return _hiSize << 32 | _loSize;

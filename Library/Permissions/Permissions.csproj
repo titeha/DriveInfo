@@ -9,8 +9,4 @@
     <Copyright>Artemy Sobolev</Copyright>
   </PropertyGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\ImportWinAPI\ImportWinAPI.csproj" />
-  </ItemGroup>
-
 </Project>

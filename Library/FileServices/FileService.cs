@@ -1,6 +1,7 @@
 ﻿namespace FileServices
 {
- internal class FileService
+ public class FileService
  {
+
  }
 }
