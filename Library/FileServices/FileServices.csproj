@@ -4,19 +4,12 @@
     <TargetFramework>net6.0-windows</TargetFramework>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <BaseOutputPath>..\..\bin\FileExtensions</BaseOutputPath>
-    <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
+    <BaseOutputPath>..\..\bin\FileServices</BaseOutputPath>
     <Authors>Artemy Sobolev</Authors>
     <Copyright>Artemy Sobolev</Copyright>
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="..\..\.editorconfig" Link=".editorconfig" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="CommonClasses" Version="1.0.0" />
     <PackageReference Include="System.Management" Version="6.0.0" />
   </ItemGroup>
 
