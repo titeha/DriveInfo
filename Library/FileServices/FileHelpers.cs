@@ -27,7 +27,7 @@ namespace FileServices
   #endregion
 
   private uint _clusterSize;
-  private const ulong _MFTFielSize = 680;
+  private const ulong _MFTFileSize = 680;
   private readonly StringBuilder _sbPath = new(MAX_PATH);
 
   /// <summary>
@@ -64,7 +64,7 @@ namespace FileServices
   {
    ulong _size = GetRealFileSize(file);
 
-   if (_MFTFielSize > _size)
+   if (_MFTFileSize > _size)
 	return _size;
 
    uint _clusterSize = GetClusterSize(GetDriveByFileInfo(file));

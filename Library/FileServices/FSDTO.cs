@@ -1,4 +1,6 @@
-﻿using System.Collections.Specialized;
+﻿using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.Linq;
 
 namespace FileServices
 {
@@ -13,6 +15,8 @@ namespace FileServices
   public ulong Size { get; internal set; }
 
   public ulong VolumeSize { get; internal set; }
+
+  public IEnumerable<string> HardLinks { get; internal set; }
 
   public bool IsCompressed
   {
@@ -51,6 +55,7 @@ namespace FileServices
    Size = 0;
    VolumeSize = 0;
    _attributes = new BitVector32(0);
+   HardLinks = Enumerable.Empty<string>();
   }
  }
 }

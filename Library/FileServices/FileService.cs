@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.IO;
-using System.Windows.Controls;
 
 namespace FileServices
 {
@@ -27,13 +26,14 @@ namespace FileServices
    {
 	FSDTO _result = new(_file.Name, directory.Name)
 	{
-	 Size = (ulong)_file.Length
+	 Size = (ulong)_file.Length,
+	 VolumeSize = _fileHelpers.GetFileSizeOnVolume(_file),
+	 IsCompressed = (FileAttributes.Compressed & _file.Attributes) == FileAttributes.Compressed,
+	 IsHidden = (FileAttributes.Hidden & _file.Attributes) == FileAttributes.Hidden,
+	 IsSystem = (FileAttributes.System & _file.Attributes) == FileAttributes.System
 	};
-	if ((directory.Attributes & FileAttributes.System) != FileAttributes.System)
-	 _result.VolumeSize = _fileHelpers.GetFileSizeOnVolume(_file);
-	_result.IsCompressed = (FileAttributes.Compressed & _file.Attributes) == FileAttributes.Compressed;
-	_result.IsHidden = (FileAttributes.Hidden & _file.Attributes) == FileAttributes.Hidden;
-	_result.IsSystem = (FileAttributes.System & _file.Attributes) == FileAttributes.System;
+	if (!((directory.Attributes & FileAttributes.System) == FileAttributes.System || _result.IsSystem))
+	 _result.HardLinks = _fileHelpers.GetHardLinks(_file);
 
 	yield return _result;
    }
@@ -51,7 +51,7 @@ namespace FileServices
 	yield return _result;
 
 	if (!_result.IsJunction)
-	 foreach (var _item in ScanDrive(_directory))
+	 foreach (FSDTO _item in ScanDrive(_directory))
 	  yield return _item;
    }
   }
