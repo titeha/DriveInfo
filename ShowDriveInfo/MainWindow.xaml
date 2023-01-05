@@ -8,66 +8,66 @@
 		Title="Информация о дисках"
 		Height="450"
 		Width="800">
- <Grid>
-  <Grid.RowDefinitions>
-   <RowDefinition Height="Auto" />
-   <RowDefinition Height="*" />
-  </Grid.RowDefinitions>
-  <GroupBox Header="Общая информация о диске"
+  <Grid>
+    <Grid.RowDefinitions>
+      <RowDefinition Height="Auto" />
+      <RowDefinition Height="*" />
+    </Grid.RowDefinitions>
+    <GroupBox Header="Общая информация о диске"
 			Margin="2">
-   <Grid>
-	<Grid.ColumnDefinitions>
-	 <ColumnDefinition Width="Auto" />
-	 <ColumnDefinition />
-	 <ColumnDefinition Width="Auto" />
-	 <ColumnDefinition />
-	</Grid.ColumnDefinitions>
-	<Grid.RowDefinitions>
-	 <RowDefinition />
-	 <RowDefinition />
-	 <RowDefinition />
-	</Grid.RowDefinitions>
-	<TextBlock Text="Имя тома"
+      <Grid>
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="Auto" />
+          <ColumnDefinition />
+          <ColumnDefinition Width="Auto" />
+          <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+          <RowDefinition />
+          <RowDefinition />
+          <RowDefinition />
+        </Grid.RowDefinitions>
+        <TextBlock Text="Имя тома"
 			   Margin="2"
 			   HorizontalAlignment="Left" />
-	<ComboBox Grid.Column="1"
+        <ComboBox Grid.Column="1"
 			  Margin="2" />
-	<TextBlock Text="Формат тома"
+        <TextBlock Text="Формат тома"
 			   Margin="2"
 			   HorizontalAlignment="Left"
 			   Grid.Column="2" />
-	<TextBlock Text="{Binding}"
+        <TextBlock Text="{Binding}"
 			   Margin="2"
 			   Grid.Column="3"
 			   HorizontalAlignment="Left" />
-	<TextBlock Text="Общий размер тома"
+        <TextBlock Text="Общий размер тома"
 			   HorizontalAlignment="Left"
 			   Grid.Row="1"
 			   Margin="2" />
-	<TextBlock Text="{Binding}"
+        <TextBlock Text="{Binding}"
 			   Margin="2"
 			   HorizontalAlignment="Left"
 			   Grid.Column="1"
 			   Grid.Row="1" />
-	<TextBlock Text="Всего свободных:"
+        <TextBlock Text="Всего свободных:"
 			   Margin="2"
 			   HorizontalAlignment="Left"
 			   Grid.Column="2"
 			   Grid.Row="1" />
-	<TextBlock Text="Доступно свободных:"
+        <TextBlock Text="Доступно свободных:"
 			   Margin="2"
 			   HorizontalAlignment="Left"
 			   Grid.Column="2"
 			   Grid.Row="2" />
-	<TextBlock Text="{Binding}"
+        <TextBlock Text="{Binding}"
 			   Margin="2"
 			   HorizontalAlignment="Left"
 			   Grid.Column="3"
 			   Grid.Row="2" />
-   </Grid>
-  </GroupBox>
-  <GroupBox Header="Файловая система"
+      </Grid>
+    </GroupBox>
+    <GroupBox Header="Файловая система"
 			Grid.Row="1"
 			Margin="2"></GroupBox>
- </Grid>
+  </Grid>
 </Window>
