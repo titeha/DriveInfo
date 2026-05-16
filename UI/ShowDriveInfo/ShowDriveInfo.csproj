@@ -17,13 +17,4 @@
     <Page Remove="ViewModels\**" />
   </ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="CommonClasses" Version="1.0.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\Library\FileServices\FileServices.csproj" />
-    <ProjectReference Include="..\Library\Permissions\Permissions.csproj" />
-  </ItemGroup>
-
 </Project>

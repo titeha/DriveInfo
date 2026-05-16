@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 
-using static Permissions.Permission;
+//using static Permissions.Permission;
 
 namespace ShowDriveInfo
 {
@@ -16,7 +16,7 @@ namespace ShowDriveInfo
   protected override void OnStartup(StartupEventArgs e)
   {
    base.OnStartup(e);
-   _hasSeBackupPrivileges = RequestSeBackupPrivileges();
+   //_hasSeBackupPrivileges = RequestSeBackupPrivileges();
   }
  }
 }

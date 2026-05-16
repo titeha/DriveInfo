@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.0.32014.148
+# Visual Studio Version 18
+VisualStudioVersion = 18.6.11806.211
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Library", "Library", "{0B8CF439-DE23-4E2A-94D0-85A99580A737}"
 EndProject
@@ -12,10 +12,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.editorconfig = .editorconfig
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShowDriveInfo", "ShowDriveInfo\ShowDriveInfo.csproj", "{91352924-361C-4C55-BC80-801C265877AE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShowDriveInfo", "UI\ShowDriveInfo\ShowDriveInfo.csproj", "{91352924-361C-4C55-BC80-801C265877AE}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FileServices", "Library\FileServices\FileServices.csproj", "{C26DE20D-9052-4E18-9A45-B689C88D0155}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UI", "UI", "{DFAF3BD3-4011-4F81-B0F2-AAE928BEF4AC}"
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
