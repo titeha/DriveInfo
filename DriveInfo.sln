@@ -17,6 +17,11 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FileServices", "Library\FileServices\FileServices.csproj", "{C26DE20D-9052-4E18-9A45-B689C88D0155}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UI", "UI", "{DFAF3BD3-4011-4F81-B0F2-AAE928BEF4AC}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{26CE010A-EB55-42E2-9C7D-AF4472A33B4D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FileServices.Tests", "Tests\FileServices.Tests\FileServices.Tests.csproj", "{E3E88F26-389F-4A3F-AE3B-751B1BE5EFC0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -35,13 +40,19 @@ Global
 		{C26DE20D-9052-4E18-9A45-B689C88D0155}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C26DE20D-9052-4E18-9A45-B689C88D0155}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C26DE20D-9052-4E18-9A45-B689C88D0155}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E3E88F26-389F-4A3F-AE3B-751B1BE5EFC0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E3E88F26-389F-4A3F-AE3B-751B1BE5EFC0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E3E88F26-389F-4A3F-AE3B-751B1BE5EFC0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E3E88F26-389F-4A3F-AE3B-751B1BE5EFC0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{2BEC12F0-4AB0-4773-B2A4-F3108CE82F61} = {0B8CF439-DE23-4E2A-94D0-85A99580A737}
+		{91352924-361C-4C55-BC80-801C265877AE} = {DFAF3BD3-4011-4F81-B0F2-AAE928BEF4AC}
 		{C26DE20D-9052-4E18-9A45-B689C88D0155} = {0B8CF439-DE23-4E2A-94D0-85A99580A737}
+		{E3E88F26-389F-4A3F-AE3B-751B1BE5EFC0} = {26CE010A-EB55-42E2-9C7D-AF4472A33B4D}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7AE4561E-535D-4F57-8A06-8FD1345F8CF4}
