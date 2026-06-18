@@ -6,6 +6,14 @@ namespace FileServices
 {
  public struct FSDTO
  {
+  // Индексатор BitVector32 принимает битовую маску, а не индекс. Маски создаём через
+  // CreateMask, чтобы каждый флаг занимал свой отдельный бит и не пересекался с другими.
+  private static readonly int _compressedMask = BitVector32.CreateMask();
+  private static readonly int _directoryMask = BitVector32.CreateMask(_compressedMask);
+  private static readonly int _hiddenMask = BitVector32.CreateMask(_directoryMask);
+  private static readonly int _junctionMask = BitVector32.CreateMask(_hiddenMask);
+  private static readonly int _systemMask = BitVector32.CreateMask(_junctionMask);
+
   private BitVector32 _attributes;
 
   public string Name { get; internal set; }
@@ -20,32 +28,32 @@ namespace FileServices
 
   public bool IsCompressed
   {
-   get => _attributes[0];
-   internal set => _attributes[0] = value;
+   get => _attributes[_compressedMask];
+   internal set => _attributes[_compressedMask] = value;
   }
 
   public bool IsDirectory
   {
-   get => _attributes[1];
-   internal set => _attributes[1] = value;
+   get => _attributes[_directoryMask];
+   internal set => _attributes[_directoryMask] = value;
   }
 
   public bool IsHidden
   {
-   get => _attributes[2];
-   internal set => _attributes[2] = value;
+   get => _attributes[_hiddenMask];
+   internal set => _attributes[_hiddenMask] = value;
   }
 
   public bool IsJunction
   {
-   get => _attributes[3];
-   internal set => _attributes[3] = value;
+   get => _attributes[_junctionMask];
+   internal set => _attributes[_junctionMask] = value;
   }
 
   public bool IsSystem
   {
-   get => _attributes[4];
-   internal set => _attributes[4] = value;
+   get => _attributes[_systemMask];
+   internal set => _attributes[_systemMask] = value;
   }
 
   public FSDTO(string name, string parent)

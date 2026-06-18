@@ -22,7 +22,7 @@ namespace FileServices
 
     private IEnumerable<FSDTO> ScanDrive(DirectoryInfo directory)
     {
-      foreach (FileInfo _file in directory.EnumerateFiles())
+      foreach (FileInfo _file in SafeEnumerateFiles(directory))
       {
         FSDTO _result = new(_file.Name, directory.Name)
         {
@@ -38,7 +38,7 @@ namespace FileServices
         yield return _result;
       }
 
-      foreach (var _directory in directory.EnumerateDirectories())
+      foreach (var _directory in SafeEnumerateDirectories(directory))
       {
         FSDTO _result = new(_directory.Name, directory.Name)
         {
@@ -55,5 +55,18 @@ namespace FileServices
             yield return _item;
       }
     }
+
+    /// <summary>
+    /// Перечисляет файлы каталога, молча пропуская каталог при отказе доступа или ошибке ввода-вывода,
+    /// чтобы один защищённый каталог не обрывал обход всего диска.
+    /// </summary>
+    private static IEnumerable<FileInfo> SafeEnumerateFiles(DirectoryInfo directory) =>
+      SafeEnumeration.Enumerate(directory.EnumerateFiles);
+
+    /// <summary>
+    /// Перечисляет подкаталоги каталога, молча пропуская каталог при отказе доступа или ошибке ввода-вывода.
+    /// </summary>
+    private static IEnumerable<DirectoryInfo> SafeEnumerateDirectories(DirectoryInfo directory) =>
+      SafeEnumeration.Enumerate(directory.EnumerateDirectories);
   }
 }
