@@ -65,6 +65,7 @@ namespace ShowDriveInfo.Services
       dto.IsHidden,
       dto.IsSystem,
       dto.IsJunction,
+      dto.IsAccessDenied,
       dto.HardLinks.ToArray());
   }
 }

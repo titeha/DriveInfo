@@ -16,5 +16,6 @@ namespace ShowDriveInfo.Services
     bool IsHidden,
     bool IsSystem,
     bool IsJunction,
+    bool IsAccessDenied,
     IReadOnlyCollection<string> HardLinks);
 }

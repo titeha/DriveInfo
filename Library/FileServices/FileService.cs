@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 
 namespace FileServices
@@ -40,19 +41,45 @@ namespace FileServices
 
       foreach (var _directory in SafeEnumerateDirectories(directory))
       {
+        bool _junction = _directory.IsJunction();
+        // В junction не заходим намеренно; остальные проверяем на доступность, чтобы пометить недоступные.
+        bool _accessible = _junction || IsAccessible(_directory);
+
         FSDTO _result = new(_directory.Name, directory.FullName)
         {
           IsDirectory = true,
-          IsJunction = _directory.IsJunction(),
+          IsJunction = _junction,
+          IsAccessDenied = !_junction && !_accessible,
           IsHidden = (FileAttributes.Hidden & _directory.Attributes) == FileAttributes.Hidden,
           IsSystem = (FileAttributes.System & _directory.Attributes) == FileAttributes.System
         };
 
         yield return _result;
 
-        if (!_result.IsJunction)
+        if (!_junction && _accessible)
           foreach (FSDTO _item in ScanDrive(_directory))
             yield return _item;
+      }
+    }
+
+    /// <summary>
+    /// Проверяет, можно ли перечислить содержимое каталога (открытие хэндла проверяет права доступа).
+    /// </summary>
+    private static bool IsAccessible(DirectoryInfo directory)
+    {
+      try
+      {
+        using IEnumerator<FileSystemInfo> _probe = directory.EnumerateFileSystemInfos().GetEnumerator();
+        _probe.MoveNext();
+        return true;
+      }
+      catch (UnauthorizedAccessException)
+      {
+        return false;
+      }
+      catch (IOException)
+      {
+        return false;
       }
     }
 

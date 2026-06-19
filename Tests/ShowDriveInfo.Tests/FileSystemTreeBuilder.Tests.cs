@@ -10,12 +10,12 @@ namespace ShowDriveInfo.Tests
     private static ScanItem Dir(string name, string parent) =>
       new(name, parent, IsDirectory: true, Size: 0, OccupiedSize: 0,
           IsCompressed: false, IsHidden: false, IsSystem: false, IsJunction: false,
-          HardLinks: []);
+          IsAccessDenied: false, HardLinks: []);
 
     private static ScanItem Fil(string name, string parent, ulong size, ulong occupied, string[]? hardLinks = null) =>
       new(name, parent, IsDirectory: false, Size: size, OccupiedSize: occupied,
           IsCompressed: false, IsHidden: false, IsSystem: false, IsJunction: false,
-          HardLinks: hardLinks ?? []);
+          IsAccessDenied: false, HardLinks: hardLinks ?? []);
 
     [Fact]
     public void Build_SimpleTree_BuildsHierarchy()
@@ -112,7 +112,7 @@ namespace ShowDriveInfo.Tests
     {
       var hiddenDir = new ScanItem("secret", @"C:\", IsDirectory: true, Size: 0, OccupiedSize: 0,
         IsCompressed: false, IsHidden: true, IsSystem: true, IsJunction: false,
-        HardLinks: System.Array.Empty<string>());
+        IsAccessDenied: false, HardLinks: System.Array.Empty<string>());
 
       var root = FileSystemTreeBuilder.Build(_root, _root, new[] { hiddenDir });
       var dir = root.Children.OfType<DirectoryDetails>().Single();
@@ -120,6 +120,19 @@ namespace ShowDriveInfo.Tests
       Assert.True(dir.IsHidden);
       Assert.True(dir.IsSystem);
       Assert.False(dir.IsJunction);
+    }
+
+    [Fact]
+    public void Build_PreservesAccessDeniedFlag()
+    {
+      var lockedDir = new ScanItem("protected", @"C:\", IsDirectory: true, Size: 0, OccupiedSize: 0,
+        IsCompressed: false, IsHidden: false, IsSystem: false, IsJunction: false,
+        IsAccessDenied: true, HardLinks: System.Array.Empty<string>());
+
+      var root = FileSystemTreeBuilder.Build(_root, _root, new[] { lockedDir });
+      var dir = root.Children.OfType<DirectoryDetails>().Single();
+
+      Assert.True(dir.IsAccessDenied);
     }
 
     [Theory]

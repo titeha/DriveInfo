@@ -14,6 +14,7 @@
   <Window.Resources>
     <conv:BytesToStringConverter x:Key="Bytes" />
     <conv:NodeToBrushConverter x:Key="NodeBrush" />
+    <conv:DriveToStringConverter x:Key="DriveDisplay" />
     <BooleanToVisibilityConverter x:Key="BoolVis" />
   </Window.Resources>
 
@@ -29,8 +30,7 @@
       <Grid Margin="4">
         <Grid.ColumnDefinitions>
           <ColumnDefinition Width="Auto" />
-          <ColumnDefinition Width="220" />
-          <ColumnDefinition Width="Auto" />
+          <ColumnDefinition Width="260" />
           <ColumnDefinition Width="Auto" />
           <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
@@ -38,13 +38,16 @@
         <TextBlock Text="Том:" VerticalAlignment="Center" Margin="2" />
         <ComboBox Grid.Column="1" Margin="2"
                   ItemsSource="{Binding Drives}"
-                  DisplayMemberPath="Name"
-                  SelectedItem="{Binding SelectedDrive}" />
+                  SelectedItem="{Binding SelectedDrive}">
+          <ComboBox.ItemTemplate>
+            <DataTemplate>
+              <TextBlock Text="{Binding Converter={StaticResource DriveDisplay}}" />
+            </DataTemplate>
+          </ComboBox.ItemTemplate>
+        </ComboBox>
         <Button Grid.Column="2" Margin="6,2,2,2" Padding="10,2"
                 Content="Сканировать" Command="{Binding ScanCommand}" />
-        <Button Grid.Column="3" Margin="2" Padding="10,2"
-                Content="Отмена" Command="{Binding CancelCommand}" />
-        <TextBlock Grid.Column="4" Margin="8,2,2,2" VerticalAlignment="Center"
+        <TextBlock Grid.Column="3" Margin="8,2,2,2" VerticalAlignment="Center"
                    TextTrimming="CharacterEllipsis"
                    Text="{Binding Status}" />
       </Grid>
@@ -86,20 +89,25 @@
       </Grid>
     </GroupBox>
 
-    <!-- Файловая система: дерево + диаграмма -->
+    <!-- Файловая система: дерево + диаграмма с подвижной границей -->
     <GroupBox Header="Файловая система" Grid.Row="2" Margin="2">
       <Grid>
         <Grid.ColumnDefinitions>
-          <ColumnDefinition Width="*" />
+          <ColumnDefinition Width="2*" MinWidth="220" />
           <ColumnDefinition Width="Auto" />
+          <ColumnDefinition x:Name="PieColumn" Width="*" MinWidth="220" />
         </Grid.ColumnDefinitions>
 
         <!-- Дерево -->
         <DockPanel Grid.Column="0">
           <!-- Панель инструментов -->
           <DockPanel DockPanel.Dock="Top" Margin="2">
-            <CheckBox DockPanel.Dock="Right" Content="Диаграмма" VerticalAlignment="Center"
-                      IsChecked="{Binding ShowChart}" />
+            <StackPanel DockPanel.Dock="Right" Orientation="Horizontal">
+              <CheckBox Content="Авто-обновление" VerticalAlignment="Center" Margin="0,0,12,0"
+                        IsChecked="{Binding AutoRefresh}" />
+              <CheckBox Content="Диаграмма" VerticalAlignment="Center"
+                        IsChecked="{Binding ShowChart}" />
+            </StackPanel>
             <TextBlock Text="Содержимое тома" FontWeight="Bold" VerticalAlignment="Center" />
           </DockPanel>
 
@@ -111,35 +119,116 @@
               <ColumnDefinition Width="120" />
             </Grid.ColumnDefinitions>
             <TextBlock Text="Имя" FontWeight="Bold" />
-            <TextBlock Grid.Column="1" Text="На диске" FontWeight="Bold" HorizontalAlignment="Right" />
-            <TextBlock Grid.Column="2" Text="Размер" FontWeight="Bold" HorizontalAlignment="Right" />
+            <TextBlock Grid.Column="1" Text="На диске" FontWeight="Bold" HorizontalAlignment="Right" Margin="0,0,8,0" />
+            <TextBlock Grid.Column="2" Text="Размер" FontWeight="Bold" HorizontalAlignment="Right" Margin="0,0,8,0" />
           </Grid>
 
-          <TreeView ItemsSource="{Binding RootNodes}">
-            <TreeView.ItemContainerStyle>
+          <TreeView x:Name="FsTree" ItemsSource="{Binding RootNodes}"
+                    SelectedItemChanged="FsTree_SelectedItemChanged"
+                    ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+            <TreeView.Resources>
+              <!-- Стрелка-раскрыватель -->
+              <Style x:Key="ExpandCollapseToggle" TargetType="ToggleButton">
+                <Setter Property="Focusable" Value="False" />
+                <Setter Property="Width" Value="16" />
+                <Setter Property="Height" Value="16" />
+                <Setter Property="Template">
+                  <Setter.Value>
+                    <ControlTemplate TargetType="ToggleButton">
+                      <Border Background="Transparent" Width="16" Height="16">
+                        <Path x:Name="Arrow" Fill="Transparent" Stroke="#FF595959" StrokeThickness="1.4"
+                              Data="M 4 1 L 8 5 L 4 9" VerticalAlignment="Center" HorizontalAlignment="Center"
+                              RenderTransformOrigin="0.5,0.5" />
+                      </Border>
+                      <ControlTemplate.Triggers>
+                        <Trigger Property="IsChecked" Value="True">
+                          <Setter TargetName="Arrow" Property="Fill" Value="#FF595959" />
+                          <Setter TargetName="Arrow" Property="RenderTransform">
+                            <Setter.Value>
+                              <RotateTransform Angle="90" />
+                            </Setter.Value>
+                          </Setter>
+                        </Trigger>
+                      </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                  </Setter.Value>
+                </Setter>
+              </Style>
+
+              <!-- Неявный стиль для TreeViewItem на всех уровнях: заголовок в *-колонке,
+                   чтобы строка растягивалась на всю ширину и колонки размеров выравнивались. -->
               <Style TargetType="TreeViewItem">
                 <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-                <Setter Property="IsExpanded" Value="False" />
+                <Setter Property="Template">
+                  <Setter.Value>
+                    <ControlTemplate TargetType="TreeViewItem">
+                      <Grid>
+                        <Grid.ColumnDefinitions>
+                          <ColumnDefinition Width="16" />
+                          <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                          <RowDefinition Height="Auto" />
+                          <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+
+                        <ToggleButton x:Name="Expander" Grid.Row="0" Grid.Column="0"
+                                      ClickMode="Press" Style="{StaticResource ExpandCollapseToggle}"
+                                      IsChecked="{Binding IsExpanded, RelativeSource={RelativeSource TemplatedParent}}" />
+
+                        <Border x:Name="Bd" Grid.Row="0" Grid.Column="1"
+                                Background="{TemplateBinding Background}"
+                                Padding="{TemplateBinding Padding}">
+                          <ContentPresenter x:Name="PART_Header" ContentSource="Header"
+                                            HorizontalAlignment="Stretch" />
+                        </Border>
+
+                        <ItemsPresenter x:Name="ItemsHost" Grid.Row="1" Grid.Column="1" />
+                      </Grid>
+                      <ControlTemplate.Triggers>
+                        <Trigger Property="IsExpanded" Value="False">
+                          <Setter TargetName="ItemsHost" Property="Visibility" Value="Collapsed" />
+                        </Trigger>
+                        <Trigger Property="HasItems" Value="False">
+                          <Setter TargetName="Expander" Property="Visibility" Value="Hidden" />
+                        </Trigger>
+                        <Trigger Property="IsSelected" Value="True">
+                          <Setter TargetName="Bd" Property="Background" Value="{x:Static SystemColors.HighlightBrush}" />
+                        </Trigger>
+                      </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                  </Setter.Value>
+                </Setter>
               </Style>
-            </TreeView.ItemContainerStyle>
+            </TreeView.Resources>
             <TreeView.ItemTemplate>
               <HierarchicalDataTemplate ItemsSource="{Binding Children}">
-                <DockPanel LastChildFill="True">
-                  <TextBlock DockPanel.Dock="Right" Width="120" TextAlignment="Right"
-                             Text="{Binding Size, Converter={StaticResource Bytes}}" />
-                  <TextBlock DockPanel.Dock="Right" Width="120" TextAlignment="Right"
-                             Text="{Binding OccupiedSize, Converter={StaticResource Bytes}}" />
-                  <TextBlock Text="{Binding Name}"
+                <Grid>
+                  <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="120" />
+                    <ColumnDefinition Width="120" />
+                  </Grid.ColumnDefinitions>
+                  <TextBlock Grid.Column="0" Text="{Binding Name}"
                              Foreground="{Binding Converter={StaticResource NodeBrush}}"
                              TextTrimming="CharacterEllipsis" />
-                </DockPanel>
+                  <TextBlock Grid.Column="1" TextAlignment="Right" Margin="0,0,8,0"
+                             Text="{Binding OccupiedSize, Converter={StaticResource Bytes}}" />
+                  <TextBlock Grid.Column="2" TextAlignment="Right" Margin="0,0,8,0"
+                             Text="{Binding Size, Converter={StaticResource Bytes}}" />
+                </Grid>
               </HierarchicalDataTemplate>
             </TreeView.ItemTemplate>
           </TreeView>
         </DockPanel>
 
+        <!-- Подвижная граница -->
+        <GridSplitter x:Name="ChartSplitter" Grid.Column="1" Width="5"
+                      HorizontalAlignment="Center" VerticalAlignment="Stretch"
+                      ResizeBehavior="PreviousAndNext" Background="#DDDDDD" />
+
         <!-- Диаграмма текущего уровня -->
-        <DockPanel Grid.Column="1" Width="320" Margin="6,0,0,0"
+        <DockPanel x:Name="ChartPanel" Grid.Column="2" Margin="6,0,0,0"
                    Visibility="{Binding ShowChart, Converter={StaticResource BoolVis}}">
           <DockPanel DockPanel.Dock="Top" Margin="2">
             <Button DockPanel.Dock="Left" Content="↑ Вверх" Padding="8,2"

@@ -10,6 +10,7 @@ namespace ShowDriveInfo.Models
     private static readonly int _hiddenMask = BitVector32.CreateMask();
     private static readonly int _systemMask = BitVector32.CreateMask(_hiddenMask);
     private static readonly int _junctionMask = BitVector32.CreateMask(_systemMask);
+    private static readonly int _accessDeniedMask = BitVector32.CreateMask(_junctionMask);
 
     private BitVector32 _attributes;
     private readonly List<IFileSystemNode> _children = new();
@@ -41,6 +42,12 @@ namespace ShowDriveInfo.Models
     {
       get => _attributes[_junctionMask];
       internal set => _attributes[_junctionMask] = value;
+    }
+
+    public bool IsAccessDenied
+    {
+      get => _attributes[_accessDeniedMask];
+      internal set => _attributes[_accessDeniedMask] = value;
     }
 
     public bool IsDirectory => true;

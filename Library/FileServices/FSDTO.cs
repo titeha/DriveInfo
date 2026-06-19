@@ -13,6 +13,7 @@ namespace FileServices
   private static readonly int _hiddenMask = BitVector32.CreateMask(_directoryMask);
   private static readonly int _junctionMask = BitVector32.CreateMask(_hiddenMask);
   private static readonly int _systemMask = BitVector32.CreateMask(_junctionMask);
+  private static readonly int _accessDeniedMask = BitVector32.CreateMask(_systemMask);
 
   private BitVector32 _attributes;
 
@@ -54,6 +55,13 @@ namespace FileServices
   {
    get => _attributes[_systemMask];
    internal set => _attributes[_systemMask] = value;
+  }
+
+  /// <summary>Каталог, в который не удалось зайти при сканировании (нет доступа).</summary>
+  public bool IsAccessDenied
+  {
+   get => _attributes[_accessDeniedMask];
+   internal set => _attributes[_accessDeniedMask] = value;
   }
 
   public FSDTO(string name, string parent)

@@ -45,6 +45,8 @@ namespace ShowDriveInfo.Models
 
     public bool IsJunction => false;
 
+    public bool IsAccessDenied => false;
+
     public IReadOnlyList<IFileSystemNode> Children => _noChildren;
   }
 }

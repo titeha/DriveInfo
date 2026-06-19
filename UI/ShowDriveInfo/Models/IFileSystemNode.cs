@@ -27,6 +27,9 @@ namespace ShowDriveInfo.Models
 
     bool IsCompressed { get; }
 
+    /// <summary>Каталог недоступен (нет прав) — открыть нельзя.</summary>
+    bool IsAccessDenied { get; }
+
     IReadOnlyList<IFileSystemNode> Children { get; }
   }
 }

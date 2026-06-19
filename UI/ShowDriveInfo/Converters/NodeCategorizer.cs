@@ -9,7 +9,8 @@ namespace ShowDriveInfo.Converters
     Compressed,
     Hidden,
     System,
-    Junction
+    Junction,
+    AccessDenied
   }
 
   /// <summary>
@@ -20,6 +21,9 @@ namespace ShowDriveInfo.Converters
   {
     public static FileSystemNodeCategory Categorize(IFileSystemNode node)
     {
+      if (node.IsAccessDenied)
+        return FileSystemNodeCategory.AccessDenied;
+
       if (node.IsJunction)
         return FileSystemNodeCategory.Junction;
 

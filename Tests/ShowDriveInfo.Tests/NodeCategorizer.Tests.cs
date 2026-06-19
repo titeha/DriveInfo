@@ -19,6 +19,7 @@ namespace ShowDriveInfo.Tests
       public bool IsSystem { get; init; }
       public bool IsJunction { get; init; }
       public bool IsCompressed { get; init; }
+      public bool IsAccessDenied { get; init; }
       public IReadOnlyList<IFileSystemNode> Children => [];
     }
 
@@ -50,6 +51,19 @@ namespace ShowDriveInfo.Tests
     public void Categorize_Junction_IsJunction()
     {
       Assert.Equal(FileSystemNodeCategory.Junction, NodeCategorizer.Categorize(new FakeNode { IsJunction = true }));
+    }
+
+    [Fact]
+    public void Categorize_AccessDenied_IsAccessDenied()
+    {
+      Assert.Equal(FileSystemNodeCategory.AccessDenied, NodeCategorizer.Categorize(new FakeNode { IsAccessDenied = true }));
+    }
+
+    [Fact]
+    public void Categorize_AccessDeniedBeatsJunction()
+    {
+      var node = new FakeNode { IsAccessDenied = true, IsJunction = true, IsSystem = true };
+      Assert.Equal(FileSystemNodeCategory.AccessDenied, NodeCategorizer.Categorize(node));
     }
 
     // Приоритет: junction > system > hidden > compressed

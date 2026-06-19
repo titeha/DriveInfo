@@ -41,7 +41,8 @@ namespace ShowDriveInfo.Services
             Parent = _parent,
             IsHidden = _item.IsHidden,
             IsSystem = _item.IsSystem,
-            IsJunction = _item.IsJunction
+            IsJunction = _item.IsJunction,
+            IsAccessDenied = _item.IsAccessDenied
           };
           _byPath[_fullPath] = _dir;
           _parent.Add(_dir);

@@ -17,6 +17,7 @@ namespace ShowDriveInfo.Converters
 
       return NodeCategorizer.Categorize(_node) switch
       {
+        FileSystemNodeCategory.AccessDenied => Brushes.DarkOrange,
         FileSystemNodeCategory.Junction => Brushes.MediumPurple,
         FileSystemNodeCategory.System => Brushes.IndianRed,
         FileSystemNodeCategory.Hidden => Brushes.Gray,

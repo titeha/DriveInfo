@@ -24,6 +24,7 @@ namespace FileServices.Tests
       Assert.False(dto.IsHidden);
       Assert.False(dto.IsJunction);
       Assert.False(dto.IsSystem);
+      Assert.False(dto.IsAccessDenied);
     }
 
     // Каждый флаг упакован в отдельный бит BitVector32 — установка одного не должна задевать остальные
@@ -89,6 +90,19 @@ namespace FileServices.Tests
     }
 
     [Fact]
+    public void IsAccessDenied_SetTrue_DoesNotAffectOtherFlags()
+    {
+      var dto = new FSDTO("f", "p") { IsAccessDenied = true };
+
+      Assert.False(dto.IsCompressed);
+      Assert.False(dto.IsDirectory);
+      Assert.False(dto.IsHidden);
+      Assert.False(dto.IsJunction);
+      Assert.False(dto.IsSystem);
+      Assert.True(dto.IsAccessDenied);
+    }
+
+    [Fact]
     public void AllFlags_SetTrue_AllReadBackTrue()
     {
       var dto = new FSDTO("f", "p")
@@ -97,7 +111,8 @@ namespace FileServices.Tests
         IsDirectory = true,
         IsHidden = true,
         IsJunction = true,
-        IsSystem = true
+        IsSystem = true,
+        IsAccessDenied = true
       };
 
       Assert.True(dto.IsCompressed);
@@ -105,6 +120,7 @@ namespace FileServices.Tests
       Assert.True(dto.IsHidden);
       Assert.True(dto.IsJunction);
       Assert.True(dto.IsSystem);
+      Assert.True(dto.IsAccessDenied);
     }
   }
 }
