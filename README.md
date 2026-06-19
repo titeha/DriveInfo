@@ -32,7 +32,6 @@
 | Проект | Назначение |
 |--------|-----------|
 | `Library/FileServices` | Ядро: сканирование диска, WinAPI/WMI-хелперы (размер на диске, жёсткие ссылки, junction), слежение за ФС (`DriveWatcher`) |
-| `Library/Permissions` | Запрос привилегии `SeBackupPrivilege` (на полке — для текущей цели не требуется) |
 | `UI/ShowDriveInfo` | WPF-приложение (MVVM): сканирование, дерево, диаграмма |
 | `Tests/FileServices.Tests` | Юнит-тесты ядра (xUnit) |
 | `Tests/ShowDriveInfo.Tests` | Юнит-тесты прикладной логики (мост, конвертеры) |

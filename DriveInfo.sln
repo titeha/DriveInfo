@@ -5,8 +5,6 @@ VisualStudioVersion = 18.6.11806.211
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Library", "Library", "{0B8CF439-DE23-4E2A-94D0-85A99580A737}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Permissions", "Library\Permissions\Permissions.csproj", "{2BEC12F0-4AB0-4773-B2A4-F3108CE82F61}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{359746C5-F0A9-4B54-AC69-6B214818EB8F}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
@@ -34,18 +32,6 @@ Global
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{2BEC12F0-4AB0-4773-B2A4-F3108CE82F61}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2BEC12F0-4AB0-4773-B2A4-F3108CE82F61}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2BEC12F0-4AB0-4773-B2A4-F3108CE82F61}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{2BEC12F0-4AB0-4773-B2A4-F3108CE82F61}.Debug|x64.Build.0 = Debug|Any CPU
-		{2BEC12F0-4AB0-4773-B2A4-F3108CE82F61}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{2BEC12F0-4AB0-4773-B2A4-F3108CE82F61}.Debug|x86.Build.0 = Debug|Any CPU
-		{2BEC12F0-4AB0-4773-B2A4-F3108CE82F61}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2BEC12F0-4AB0-4773-B2A4-F3108CE82F61}.Release|Any CPU.Build.0 = Release|Any CPU
-		{2BEC12F0-4AB0-4773-B2A4-F3108CE82F61}.Release|x64.ActiveCfg = Release|Any CPU
-		{2BEC12F0-4AB0-4773-B2A4-F3108CE82F61}.Release|x64.Build.0 = Release|Any CPU
-		{2BEC12F0-4AB0-4773-B2A4-F3108CE82F61}.Release|x86.ActiveCfg = Release|Any CPU
-		{2BEC12F0-4AB0-4773-B2A4-F3108CE82F61}.Release|x86.Build.0 = Release|Any CPU
 		{91352924-361C-4C55-BC80-801C265877AE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{91352924-361C-4C55-BC80-801C265877AE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{91352924-361C-4C55-BC80-801C265877AE}.Debug|x64.ActiveCfg = Debug|Any CPU
@@ -99,7 +85,6 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{2BEC12F0-4AB0-4773-B2A4-F3108CE82F61} = {0B8CF439-DE23-4E2A-94D0-85A99580A737}
 		{91352924-361C-4C55-BC80-801C265877AE} = {DFAF3BD3-4011-4F81-B0F2-AAE928BEF4AC}
 		{C26DE20D-9052-4E18-9A45-B689C88D0155} = {0B8CF439-DE23-4E2A-94D0-85A99580A737}
 		{E3E88F26-389F-4A3F-AE3B-751B1BE5EFC0} = {26CE010A-EB55-42E2-9C7D-AF4472A33B4D}
