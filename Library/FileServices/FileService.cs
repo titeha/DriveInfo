@@ -24,7 +24,7 @@ namespace FileServices
     {
       foreach (FileInfo _file in SafeEnumerateFiles(directory))
       {
-        FSDTO _result = new(_file.Name, directory.Name)
+        FSDTO _result = new(_file.Name, directory.FullName)
         {
           Size = (ulong)_file.Length,
           VolumeSize = _fileHelpers.GetFileSizeOnVolume(_file),
@@ -40,7 +40,7 @@ namespace FileServices
 
       foreach (var _directory in SafeEnumerateDirectories(directory))
       {
-        FSDTO _result = new(_directory.Name, directory.Name)
+        FSDTO _result = new(_directory.Name, directory.FullName)
         {
           IsDirectory = true,
           IsJunction = _directory.IsJunction(),

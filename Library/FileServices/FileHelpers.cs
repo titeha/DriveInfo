@@ -68,13 +68,19 @@ public sealed class FileHelpers
     using var _searcher = new ManagementObjectSearcher($"select BlockSize from Win32_volume where DriveLetter = '{_key}'");
     foreach (ManagementObject _item in _searcher.Get().Cast<ManagementObject>())
     {
-      _clusterSize = (uint)_item["BlockSize"];
+      _clusterSize = ParseBlockSize(_item["BlockSize"]);
       break;
     }
 
     _clusterSizes[_key] = _clusterSize;
     return _clusterSize;
   }
+
+  /// <summary>
+  /// Преобразует значение BlockSize из WMI в uint. В WMI Win32_Volume.BlockSize имеет тип uint64,
+  /// поэтому прямое приведение упакованного ulong к uint бросает InvalidCastException — используем Convert.
+  /// </summary>
+  internal static uint ParseBlockSize(object? value) => value is null ? 0u : Convert.ToUInt32(value);
 
   private static DriveInfo GetDriveByFileInfo(FileInfo file) => new(Path.GetPathRoot(file.FullName)
    ?? throw new ArgumentException($"Неверное имя файла {file.FullName}"));

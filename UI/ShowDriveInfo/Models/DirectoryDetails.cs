@@ -1,94 +1,61 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Collections.Specialized;
 
 namespace ShowDriveInfo.Models
 {
-  public class DirectoryDetails
+  public sealed class DirectoryDetails : IFileSystemNode
   {
-    private ulong _size;
-    private ulong _occupiedSize;
-    private DirectoryDetails _parent;
+    // BitVector32 индексируется битовой маской, а не порядковым номером — маски создаём
+    // через CreateMask(), иначе флаги пересекаются (см. историю бага в FSDTO).
+    private static readonly int _hiddenMask = BitVector32.CreateMask();
+    private static readonly int _systemMask = BitVector32.CreateMask(_hiddenMask);
+    private static readonly int _junctionMask = BitVector32.CreateMask(_systemMask);
+
     private BitVector32 _attributes;
-
-    public List<DirectoryDetails> Directories { get; }
-
-    public List<FileDetails> Files { get; }
+    private readonly List<IFileSystemNode> _children = new();
 
     public string Name { get; }
 
-    public ulong OccupiedSize
-    {
-      get
-      {
-        if (_occupiedSize == 0)
-          _occupiedSize = CalcOccupiedSize();
+    public string FullPath { get; }
 
-        return _occupiedSize;
-      }
-    }
+    /// <summary>Родительский каталог (null для корня) — для навигации «вверх».</summary>
+    public DirectoryDetails? Parent { get; internal set; }
 
-    public ulong Size
-    {
-      get
-      {
-        if (_size == 0)
-          _size = CalcSize();
+    public ulong Size { get; internal set; }
 
-        return _size;
-      }
-    }
+    public ulong OccupiedSize { get; internal set; }
 
     public bool IsHidden
     {
-      get => _attributes[0];
-      internal set => _attributes[0] = value;
+      get => _attributes[_hiddenMask];
+      internal set => _attributes[_hiddenMask] = value;
     }
 
     public bool IsSystem
     {
-      get => _attributes[1];
-      internal set => _attributes[1] = value;
+      get => _attributes[_systemMask];
+      internal set => _attributes[_systemMask] = value;
     }
 
     public bool IsJunction
     {
-      get => _attributes[2];
-      internal set => _attributes[2] = value;
+      get => _attributes[_junctionMask];
+      internal set => _attributes[_junctionMask] = value;
     }
 
-    public DirectoryDetails(string name, DirectoryDetails parent)
+    public bool IsDirectory => true;
+
+    public bool IsCompressed => false;
+
+    public IReadOnlyList<IFileSystemNode> Children => _children;
+
+    public DirectoryDetails(string name, string fullPath)
     {
       Name = name;
-      _parent = parent;
-      Directories = new List<DirectoryDetails>();
-      Files = new List<FileDetails>();
+      FullPath = fullPath;
       _attributes = new BitVector32();
     }
 
-    private ulong CalcOccupiedSize()
-    {
-      ulong _calculatedOccupiedSize = 0;
-
-      foreach (FileDetails _file in Files)
-        _calculatedOccupiedSize += _file.OccupiedSize;
-
-      foreach (DirectoryDetails _directory in Directories)
-        _calculatedOccupiedSize += _directory.OccupiedSize;
-
-      return _calculatedOccupiedSize;
-    }
-
-    private ulong CalcSize()
-    {
-      ulong _calulatedSize = 0;
-
-      foreach (FileDetails _file in Files)
-        _calulatedSize += _file.Size;
-
-      foreach (DirectoryDetails _directory in Directories)
-        _calulatedSize += _directory.Size;
-
-      return _calulatedSize;
-    }
+    internal void Add(IFileSystemNode child) => _children.Add(child);
   }
 }

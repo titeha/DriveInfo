@@ -1,73 +1,158 @@
-﻿<Window x:Class="ShowDriveInfo.MainWindow"
-		xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-		xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-		xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-		xmlns:local="clr-namespace:ShowDriveInfo"
-		mc:Ignorable="d"
-		Title="Информация о дисках"
-		Height="450"
-		Width="800">
-  <Grid>
+<Window x:Class="ShowDriveInfo.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ShowDriveInfo"
+        xmlns:conv="clr-namespace:ShowDriveInfo.Converters"
+        xmlns:ctrl="clr-namespace:ShowDriveInfo.Controls"
+        mc:Ignorable="d"
+        Title="Информация о дисках"
+        Height="580"
+        Width="940">
+
+  <Window.Resources>
+    <conv:BytesToStringConverter x:Key="Bytes" />
+    <conv:NodeToBrushConverter x:Key="NodeBrush" />
+    <BooleanToVisibilityConverter x:Key="BoolVis" />
+  </Window.Resources>
+
+  <Grid Margin="6">
     <Grid.RowDefinitions>
+      <RowDefinition Height="Auto" />
       <RowDefinition Height="Auto" />
       <RowDefinition Height="*" />
     </Grid.RowDefinitions>
-    <GroupBox Header="Общая информация о диске"
-			Margin="2">
-      <Grid>
+
+    <!-- Выбор диска и запуск сканирования -->
+    <GroupBox Header="Диск" Grid.Row="0" Margin="2">
+      <Grid Margin="4">
         <Grid.ColumnDefinitions>
           <ColumnDefinition Width="Auto" />
-          <ColumnDefinition />
+          <ColumnDefinition Width="220" />
           <ColumnDefinition Width="Auto" />
-          <ColumnDefinition />
+          <ColumnDefinition Width="Auto" />
+          <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <TextBlock Text="Том:" VerticalAlignment="Center" Margin="2" />
+        <ComboBox Grid.Column="1" Margin="2"
+                  ItemsSource="{Binding Drives}"
+                  DisplayMemberPath="Name"
+                  SelectedItem="{Binding SelectedDrive}" />
+        <Button Grid.Column="2" Margin="6,2,2,2" Padding="10,2"
+                Content="Сканировать" Command="{Binding ScanCommand}" />
+        <Button Grid.Column="3" Margin="2" Padding="10,2"
+                Content="Отмена" Command="{Binding CancelCommand}" />
+        <TextBlock Grid.Column="4" Margin="8,2,2,2" VerticalAlignment="Center"
+                   TextTrimming="CharacterEllipsis"
+                   Text="{Binding Status}" />
+      </Grid>
+    </GroupBox>
+
+    <!-- Сводка по диску -->
+    <GroupBox Header="Общая информация" Grid.Row="1" Margin="2"
+              DataContext="{Binding CurrentDrive}">
+      <Grid Margin="4">
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="Auto" />
+          <ColumnDefinition Width="*" />
+          <ColumnDefinition Width="Auto" />
+          <ColumnDefinition Width="*" />
+          <ColumnDefinition Width="Auto" />
+          <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
           <RowDefinition />
           <RowDefinition />
-          <RowDefinition />
         </Grid.RowDefinitions>
-        <TextBlock Text="Имя тома"
-			   Margin="2"
-			   HorizontalAlignment="Left" />
-        <ComboBox Grid.Column="1"
-			  Margin="2" />
-        <TextBlock Text="Формат тома"
-			   Margin="2"
-			   HorizontalAlignment="Left"
-			   Grid.Column="2" />
-        <TextBlock Text="{Binding}"
-			   Margin="2"
-			   Grid.Column="3"
-			   HorizontalAlignment="Left" />
-        <TextBlock Text="Общий размер тома"
-			   HorizontalAlignment="Left"
-			   Grid.Row="1"
-			   Margin="2" />
-        <TextBlock Text="{Binding}"
-			   Margin="2"
-			   HorizontalAlignment="Left"
-			   Grid.Column="1"
-			   Grid.Row="1" />
-        <TextBlock Text="Всего свободных:"
-			   Margin="2"
-			   HorizontalAlignment="Left"
-			   Grid.Column="2"
-			   Grid.Row="1" />
-        <TextBlock Text="Доступно свободных:"
-			   Margin="2"
-			   HorizontalAlignment="Left"
-			   Grid.Column="2"
-			   Grid.Row="2" />
-        <TextBlock Text="{Binding}"
-			   Margin="2"
-			   HorizontalAlignment="Left"
-			   Grid.Column="3"
-			   Grid.Row="2" />
+
+        <TextBlock Text="Метка:" Margin="2" />
+        <TextBlock Grid.Column="1" Margin="2" Text="{Binding VolumeLabel}" />
+        <TextBlock Grid.Column="2" Text="Файловая система:" Margin="2" />
+        <TextBlock Grid.Column="3" Margin="2" Text="{Binding DriveFormat}" />
+        <TextBlock Grid.Column="4" Text="Тип:" Margin="2" />
+        <TextBlock Grid.Column="5" Margin="2" Text="{Binding TypeOfDrive}" />
+
+        <TextBlock Grid.Row="1" Text="Занято:" Margin="2" />
+        <TextBlock Grid.Row="1" Grid.Column="1" Margin="2"
+                   Text="{Binding Used, Converter={StaticResource Bytes}}" />
+        <TextBlock Grid.Row="1" Grid.Column="2" Text="Свободно:" Margin="2" />
+        <TextBlock Grid.Row="1" Grid.Column="3" Margin="2"
+                   Text="{Binding Free, Converter={StaticResource Bytes}}" />
+        <TextBlock Grid.Row="1" Grid.Column="4" Text="Прочее/системное:" Margin="2" />
+        <TextBlock Grid.Row="1" Grid.Column="5" Margin="2"
+                   Text="{Binding Other, Converter={StaticResource Bytes}}" />
       </Grid>
     </GroupBox>
-    <GroupBox Header="Файловая система"
-			Grid.Row="1"
-			Margin="2"></GroupBox>
+
+    <!-- Файловая система: дерево + диаграмма -->
+    <GroupBox Header="Файловая система" Grid.Row="2" Margin="2">
+      <Grid>
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="*" />
+          <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+
+        <!-- Дерево -->
+        <DockPanel Grid.Column="0">
+          <!-- Панель инструментов -->
+          <DockPanel DockPanel.Dock="Top" Margin="2">
+            <CheckBox DockPanel.Dock="Right" Content="Диаграмма" VerticalAlignment="Center"
+                      IsChecked="{Binding ShowChart}" />
+            <TextBlock Text="Содержимое тома" FontWeight="Bold" VerticalAlignment="Center" />
+          </DockPanel>
+
+          <!-- Заголовок колонок -->
+          <Grid DockPanel.Dock="Top" Margin="2,2,18,2">
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="*" />
+              <ColumnDefinition Width="120" />
+              <ColumnDefinition Width="120" />
+            </Grid.ColumnDefinitions>
+            <TextBlock Text="Имя" FontWeight="Bold" />
+            <TextBlock Grid.Column="1" Text="На диске" FontWeight="Bold" HorizontalAlignment="Right" />
+            <TextBlock Grid.Column="2" Text="Размер" FontWeight="Bold" HorizontalAlignment="Right" />
+          </Grid>
+
+          <TreeView ItemsSource="{Binding RootNodes}">
+            <TreeView.ItemContainerStyle>
+              <Style TargetType="TreeViewItem">
+                <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                <Setter Property="IsExpanded" Value="False" />
+              </Style>
+            </TreeView.ItemContainerStyle>
+            <TreeView.ItemTemplate>
+              <HierarchicalDataTemplate ItemsSource="{Binding Children}">
+                <DockPanel LastChildFill="True">
+                  <TextBlock DockPanel.Dock="Right" Width="120" TextAlignment="Right"
+                             Text="{Binding Size, Converter={StaticResource Bytes}}" />
+                  <TextBlock DockPanel.Dock="Right" Width="120" TextAlignment="Right"
+                             Text="{Binding OccupiedSize, Converter={StaticResource Bytes}}" />
+                  <TextBlock Text="{Binding Name}"
+                             Foreground="{Binding Converter={StaticResource NodeBrush}}"
+                             TextTrimming="CharacterEllipsis" />
+                </DockPanel>
+              </HierarchicalDataTemplate>
+            </TreeView.ItemTemplate>
+          </TreeView>
+        </DockPanel>
+
+        <!-- Диаграмма текущего уровня -->
+        <DockPanel Grid.Column="1" Width="320" Margin="6,0,0,0"
+                   Visibility="{Binding ShowChart, Converter={StaticResource BoolVis}}">
+          <DockPanel DockPanel.Dock="Top" Margin="2">
+            <Button DockPanel.Dock="Left" Content="↑ Вверх" Padding="8,2"
+                    Command="{Binding NavigateUpCommand}" />
+            <TextBlock Margin="6,0,0,0" VerticalAlignment="Center"
+                       TextTrimming="CharacterEllipsis"
+                       Text="{Binding CurrentNode.Name}" />
+          </DockPanel>
+          <ctrl:PieChart MinHeight="260"
+                         ItemsSource="{Binding CurrentChildren}"
+                         NavigateCommand="{Binding NavigateIntoCommand}" />
+        </DockPanel>
+      </Grid>
+    </GroupBox>
   </Grid>
 </Window>

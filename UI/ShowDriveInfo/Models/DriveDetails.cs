@@ -1,12 +1,10 @@
-﻿using System.Collections.Generic;
 using System.IO;
 
 namespace ShowDriveInfo.Models
 {
-  public class DriveDetails
+  public sealed class DriveDetails
   {
     private readonly DriveType _driveType;
-    private readonly SortedSet<string> _hardLinks;
 
     public string Name { get; }
 
@@ -31,9 +29,17 @@ namespace ShowDriveInfo.Models
 
     public ulong AvailableFree { get; }
 
-    public List<DirectoryDetails> Directories { get; }
+    /// <summary>Занятое место тома (точное значение от ОС).</summary>
+    public ulong Used => Size - Free;
 
-    public List<FileDetails> Files { get; }
+    /// <summary>Корень просканированного дерева (null, пока скан не выполнен).</summary>
+    public DirectoryDetails? Root { get; internal set; }
+
+    /// <summary>
+    /// «Прочее/системное»: разница между занятым местом тома и просканированной суммой
+    /// (защищённые области, метаданные ФС, недоступное).
+    /// </summary>
+    public ulong Other { get; internal set; }
 
     public DriveDetails(DriveInfo drive)
     {
@@ -44,9 +50,6 @@ namespace ShowDriveInfo.Models
       Size = (ulong)drive.TotalSize;
       Free = (ulong)drive.TotalFreeSpace;
       AvailableFree = (ulong)drive.AvailableFreeSpace;
-      Directories = new List<DirectoryDetails>();
-      Files = new List<FileDetails>();
-      _hardLinks = new SortedSet<string>();
     }
   }
 }

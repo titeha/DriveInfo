@@ -1,22 +1,11 @@
-﻿using System.Windows;
-
-//using static Permissions.Permission;
+using System.Windows;
 
 namespace ShowDriveInfo
 {
- /// <summary>
- /// Interaction logic for App.xaml
- /// </summary>
- public partial class App : Application
- {
-  private bool _hasSeBackupPrivileges;
-
-  public bool HasSeBackupPrivileges => _hasSeBackupPrivileges;
-
-  protected override void OnStartup(StartupEventArgs e)
+  /// <summary>
+  /// Interaction logic for App.xaml
+  /// </summary>
+  public partial class App : Application
   {
-   base.OnStartup(e);
-   //_hasSeBackupPrivileges = RequestSeBackupPrivileges();
   }
- }
 }
