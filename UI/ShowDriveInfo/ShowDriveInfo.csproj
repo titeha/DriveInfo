@@ -11,6 +11,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Ti-Soft.MvvmUtilites" Version="1.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\..\Library\FileServices\FileServices.csproj" />
   </ItemGroup>
 
